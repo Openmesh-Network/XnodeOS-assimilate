@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# More info at: https://github.com/elitak/nixos-infect
+# More info at: https://github.com/Openmesh-Network/XnodeOS-assimilate
 
 set -e -o pipefail
 
@@ -32,7 +32,7 @@ makeConf() {
   done
   local network_import=""
 
-  [[ -n "$doNetConf" ]] && network_import="./networking.nix # generated at runtime by nixos-infect"
+  [[ -n "$doNetConf" ]] && network_import="./networking.nix # generated at runtime by xnodeos-assimilate"
   cat > /etc/nixos/configuration.nix << EOF
 { ... }: {
   imports = [
@@ -198,7 +198,7 @@ checkExistingSwap() {
 }
 
 makeSwap() {
-  swapFile=$(mktemp /tmp/nixos-infect.XXXXX.swp)
+  swapFile=$(mktemp /tmp/xnodeos-assimilate.XXXXX.swp)
   dd if=/dev/zero "of=$swapFile" bs=1M count=$((1*1024))
   chmod 0600 "$swapFile"
   mkswap "$swapFile"
@@ -207,7 +207,7 @@ makeSwap() {
 
 removeSwap() {
   swapoff -a
-  rm -vf /tmp/nixos-infect.*.swp
+  rm -vf /tmp/xnodeos-assimilate.*.swp
 }
 
 isX86_64() {
@@ -317,7 +317,7 @@ checkEnv() {
   chmod 600 /etc/ssh/ssh_host_*_key
 }
 
-infect() {
+assimilate() {
   # Add nix build users
   # FIXME run only if necessary, rather than defaulting true
   groupadd nixbld -g 30000 || true
@@ -401,7 +401,7 @@ if [[ -z "$NO_SWAP" ]]; then
     makeSwap # smallest (512MB) droplet needs extra memory!
 fi
 makeConf
-infect
+assimilate
 if [[ -z "$NO_SWAP" ]]; then
     removeSwap
 fi
