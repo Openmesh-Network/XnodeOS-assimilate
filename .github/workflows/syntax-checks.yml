@@ -16,4 +16,5 @@ jobs:
       - name: Lint shell scripts (including ./xnodeos-assimilate)
         uses: ludeeus/action-shellcheck@master
         with:
+          severity: error
           additional_files: 'xnodeos-assimilate'
