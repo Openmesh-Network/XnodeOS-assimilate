@@ -18,7 +18,7 @@ Use with extreme caution and only on newly provisioned systems.
 > The root user will not have a password when xnodeos-assimilate runs to completion.
 > To enable root login, you *must* have an SSH key configured.
 
-4) run the script with:
+4) run the script with (replace main with whichever reference (dev, commitish, etc) you wish to deploy from):
 ```
   curl https://raw.githubusercontent.com/openmesh-network/XnodeOS-assimilate/main/xnodeos-assimilate | NIX_CHANNEL=XnodeOS-dev bash -x
 ```
