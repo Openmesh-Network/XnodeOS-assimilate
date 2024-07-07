@@ -358,7 +358,7 @@ assimilate() {
 
   [[ -z "$XNODE_CHANNEL" ]] && XNODE_CHANNEL="dev"
   nix-channel --remove nixpkgs
-  nix-channel --add "https://github.com/Openmesh-Network/Xnodepkgs/archive/$NIX_CHANNEL.tar.gz" xnodeos
+  nix-channel --add "https://github.com/Openmesh-Network/Xnodepkgs/archive/$XNODE_CHANNEL.tar.gz" xnodeos
   nix-channel --update
 
   if [[ $XNODEOS_CONFIG = http* ]]
