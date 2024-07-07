@@ -368,8 +368,10 @@ assimilate() {
   fi
 
   export XNODEOS_CONFIG="${XNODEOS_CONFIG:-/etc/nixos/configuration.nix}"
+  export NIXOS_CONFIG="${XNODEOS_CONFIG}"
 
   nix-env --set \
+    -I nixos-config=$(realpath $XNODEOS_CONFIG) \
     -I nixpkgs=$(realpath $HOME/.nix-defexpr/channels/xnodeos) \
     -f '<nixpkgs/nixos>' \
     -p /nix/var/nix/profiles/system \
