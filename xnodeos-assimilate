@@ -121,7 +121,9 @@ makePersonalisedKernelConf() {
 { config, pkgs, modulesPath, lib, ...}:
 {
   config.boot.kernelParams = [
-    "${XNODE_KERNEL_EXTRA_PARAMS}"
+    "--"
+    "XNODE_UUID=${XNODE_UUID}"
+    "XNODE_ACCESS_TOKEN=${XNODE_ACCESS_TOKEN}"
   ];
 }
 EOF
