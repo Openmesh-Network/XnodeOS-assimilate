@@ -65,7 +65,8 @@ makeConf() {
       echo -n "''$trimmed_line'' "
     done <<< "$keys")];
 
-    services.getty.greetingLine = ''<<< Welcome to Openmesh XnodeOS \${config.system.nixos.label} (\m) - \l >>>'';
+    services.getty.autologinUser = lib.mkForce "xnode";
+    services.getty.greetingLine = ''<<< Welcome to Openmesh XnodeOS \${config.system.nixos.label} (\\m) - \\l >>>'';
 
     environment.systemPackages = with pkgs; [
       nyancat
