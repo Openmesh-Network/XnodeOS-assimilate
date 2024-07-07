@@ -283,6 +283,10 @@ fakeCurlUsingWget() {
     }; export -f curl; }
 }
 
+checkUserAcceptsDestruction() {
+  [[ "${ACCEPT_DESTRUCTION_OF_SYSTEM}" == "Yes, destroy my system and delete all of my data. I know what I'm doing." ]] || { echo "ERROR: Destruction of system and data must be accepted explicitly. Read the documentation."; return 1; }
+}
+
 req() {
   type "$1" > /dev/null 2>&1 || which "$1" > /dev/null 2>&1
 }
@@ -394,6 +398,7 @@ if [[ "$PROVIDER" = "digitalocean" ]] || [[ "$PROVIDER" = "servarica" ]] || [[ "
 	doNetConf=y # some providers require detailed network config to be generated
 fi
 
+checkUserAcceptsDestruction
 checkEnv
 prepareEnv
 checkExistingSwap
