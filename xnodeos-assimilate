@@ -38,7 +38,7 @@ makeConf() {
   imports = [
     ./hardware-configuration.nix
     $network_import
-    $NIXOS_IMPORT
+    $XNODEOS_IMPORT
   ];
 
   boot.tmp.cleanOnBoot = true;
@@ -317,7 +317,7 @@ checkEnv() {
   req cut || req df    || { echo "ERROR: Missing coreutils (cut, df)"; return 1; }
 
   # On some versions of Oracle Linux these have the wrong permissions,
-  # which stops sshd from starting when NixOS boots
+  # which stops sshd from starting when XnodeOS boots
   chmod 600 /etc/ssh/ssh_host_*_key
 }
 
@@ -337,21 +337,21 @@ assimilate() {
   # shellcheck disable=SC1090
   source ~/.nix-profile/etc/profile.d/nix.sh
 
-  [[ -z "$NIX_CHANNEL" ]] && NIX_CHANNEL="nixos-24.05"
+  [[ -z "$XNODE_CHANNEL" ]] && XNODE_CHANNEL="dev"
   nix-channel --remove nixpkgs
-  nix-channel --add "https://nixos.org/channels/$NIX_CHANNEL" nixos
+  nix-channel --add "https://github.com/Openmesh-Network/Xnodepkgs/archive/$NIX_CHANNEL.tar.gz" xnodeos
   nix-channel --update
 
-  if [[ $NIXOS_CONFIG = http* ]]
+  if [[ $XNODEOS_CONFIG = http* ]]
   then
-    curl $NIXOS_CONFIG -o /etc/nixos/configuration.nix
-    unset NIXOS_CONFIG
+    curl $XNODEOS_CONFIG -o /etc/nixos/configuration.nix
+    unset XNODEOS_CONFIG
   fi
 
-  export NIXOS_CONFIG="${NIXOS_CONFIG:-/etc/nixos/configuration.nix}"
+  export XNODEOS_CONFIG="${XNODEOS_CONFIG:-/etc/nixos/configuration.nix}"
 
   nix-env --set \
-    -I nixpkgs=$(realpath $HOME/.nix-defexpr/channels/nixos) \
+    -I nixpkgs=$(realpath $HOME/.nix-defexpr/channels/xnodeos) \
     -f '<nixpkgs/nixos>' \
     -p /nix/var/nix/profiles/system \
     -A system
@@ -393,7 +393,7 @@ if [ ! -v PROVIDER ]; then
 fi
 
 [ "$PROVIDER" = "digitalocean" ] && doNetConf=y # digitalocean requires detailed network config to be generated
-[ "$PROVIDER" = "lightsail" ] && newrootfslabel="nixos"
+[ "$PROVIDER" = "lightsail" ] && newrootfslabel="xnodeos"
 if [[ "$PROVIDER" = "digitalocean" ]] || [[ "$PROVIDER" = "servarica" ]] || [[ "$PROVIDER" = "hetznercloud" ]]; then
 	doNetConf=y # some providers require detailed network config to be generated
 fi

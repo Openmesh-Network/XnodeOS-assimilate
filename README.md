@@ -20,7 +20,7 @@ Use with extreme caution and only on newly provisioned systems.
 
 4) run the script with (replace main with whichever reference (dev, commitish, etc) you wish to deploy from):
 ```
-  curl https://raw.githubusercontent.com/openmesh-network/XnodeOS-assimilate/main/xnodeos-assimilate | NIX_CHANNEL=XnodeOS-dev bash -x
+  curl https://raw.githubusercontent.com/openmesh-network/XnodeOS-assimilate/main/xnodeos-assimilate | XNODE_CHANNEL=dev bash -x
 ```
 
 *NB*: This script wipes out the targeted host's root filesystem when it runs to completion.
