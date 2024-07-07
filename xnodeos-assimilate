@@ -42,36 +42,37 @@ makeConf() {
     $XNODEOS_IMPORT
   ] ++ lib.optional (builtins.pathExists /var/lib/openmesh-xnode-admin/config.nix) /var/lib/openmesh-xnode-admin/config.nix;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.settings.trusted-users = [ "root" "xnode" ];
+  config = {
+    nix.settings.experimental-features = [ "nix-command" "flakes" ];
+    nix.settings.trusted-users = [ "root" "xnode" ];
 
-  services.openmesh.xnode.admin.enable = true;
-  services.openmesh.xnode.admin.remoteDir = "https://dpl-staging.openmesh.network/xnodes/functions";
+    services.openmesh.xnode.admin.enable = true;
+    services.openmesh.xnode.admin.remoteDir = "https://dpl-staging.openmesh.network/xnodes/functions";
 
-  boot.tmp.cleanOnBoot = true;
-  zramSwap.enable = ${zramswap};
-  networking.hostName = "$(hostname -s)";
-  networking.domain = "$(hostname -d)";
-  services.openssh.enable = true;
+    boot.tmp.cleanOnBoot = true;
+    zramSwap.enable = ${zramswap};
+    networking.hostName = "$(hostname -s)";
+    networking.domain = "$(hostname -d)";
+    services.openssh.enable = true;
 
-  users.users.xnode = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    users.users.xnode = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" ];
+    };
+    users.users.xnode.openssh.authorizedKeys.keys = [$(while read -r line; do
+      line=$(echo -n "$line" | sed 's/\r//g')
+      trimmed_line=$(echo -n "$line" | xargs)
+      echo -n "''$trimmed_line'' "
+    done <<< "$keys")];
+
+    services.getty.greetingLine = ''<<< Welcome to Openmesh XnodeOS \${config.system.nixos.label} (\m) - \l >>>'';
+
+    environment.systemPackages = with pkgs; [
+      nyancat
+    ];
+
+    system.stateVersion = "24.11";
   };
-  users.users.xnode.openssh.authorizedKeys.keys = [$(while read -r line; do
-    line=$(echo -n "$line" | sed 's/\r//g')
-    trimmed_line=$(echo -n "$line" | xargs)
-    echo -n "''$trimmed_line'' "
-  done <<< "$keys")];
-
-  services.getty.autoLoginUser = lib.mkForce "xnode";
-  services.getty.greetingLine = ''<<< Welcome to Openmesh XnodeOS \${config.system.nixos.label} (\m) - \l >>>'';
-
-  environment.systemPackages = with pkgs; [
-    nyancat
-  ];
-
-  system.stateVersion = "24.11";
 }
 EOF
 
