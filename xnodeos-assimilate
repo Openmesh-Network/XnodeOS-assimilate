@@ -40,7 +40,7 @@ makeConf() {
     ./hardware-configuration.nix
     $network_import
     $XNODEOS_IMPORT
-  ] ++ lib.optional (builtins.pathExists /var/lib/openmesh-xnode-admin/config.nix) /var/lib/openmesh-xnode-admin/config.nix;
+  ] ++ lib.optional (builtins.pathExists /etc/nixos/kernel-personalisation.nix) /etc/nixos/kernel-personalisation.nix ++ lib.optional (builtins.pathExists /var/lib/openmesh-xnode-admin/config.nix) /var/lib/openmesh-xnode-admin/config.nix;
 
   config = {
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -111,9 +111,22 @@ $bootcfg
   $swapcfg
 }
 EOF
-
+  [[ -n "$XNODE_KERNEL_EXTRA_PARAMS" ]] && makePersonalisedKernelConf || true
   [[ -n "$doNetConf" ]] && makeNetworkingConf || true
 }
+
+makePersonalisedKernelConf() {
+  mkdir -p /etc/nixos
+  cat > /etc/nixos/kernel-personalisation.nix << EOF
+{ config, pkgs, modulesPath, lib, ...}:
+{
+  config.boot.kernelParams = [
+    "${XNODE_KERNEL_EXTRA_PARAMS}"
+  ];
+}
+EOF
+}
+
 
 makeLightsailConf() {
   mkdir -p /etc/nixos
