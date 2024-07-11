@@ -377,7 +377,7 @@ assimilate() {
 
   [[ -z "$XNODE_CHANNEL" ]] && XNODE_CHANNEL="dev"
   nix-channel --remove nixpkgs
-  nix-channel --add "https://github.com/Openmesh-Network/Xnodepkgs/archive/$XNODE_CHANNEL.tar.gz" nixpkgs
+  nix-channel --add "https://github.com/Openmesh-Network/Xnodepkgs/archive/$XNODE_CHANNEL.tar.gz" nixos
   nix-channel --update
 
   if [[ $XNODEOS_CONFIG = http* ]]
@@ -391,7 +391,7 @@ assimilate() {
 
   nix-env --set \
     -I nixos-config=$(realpath $XNODEOS_CONFIG) \
-    -I nixpkgs=$(realpath $HOME/.nix-defexpr/channels/nixpkgs) \
+    -I nixpkgs=$(realpath $HOME/.nix-defexpr/channels/nixos) \
     -f '<nixpkgs/nixos>' \
     -p /nix/var/nix/profiles/system \
     -A system
