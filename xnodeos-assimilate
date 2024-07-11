@@ -45,7 +45,7 @@ makeConf() {
   config = {
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
     nix.settings.trusted-users = [ "root" "xnode" ];
-    nix.system.defaultChannel = "https://github.com/Openmesh-Network/Xnodepkgs/archive/$XNODE_CHANNEL.tar.gz";
+    system.defaultChannel = "https://github.com/Openmesh-Network/Xnodepkgs/archive/$XNODE_CHANNEL.tar.gz";
 
     services.openmesh.xnode.admin.enable = true;
     services.openmesh.xnode.admin.remoteDir = "https://dpl-staging.openmesh.network/xnodes/functions";
