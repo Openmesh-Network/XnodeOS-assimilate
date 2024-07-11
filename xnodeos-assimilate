@@ -34,6 +34,8 @@ makeConf() {
 
   [[ -n "$doNetConf" ]] && network_import="./networking.nix # generated at runtime by xnodeos-assimilate"
 
+  [[ -z "$XNODE_CHANNEL" ]] && XNODE_CHANNEL="dev"
+
   cat > /etc/nixos/configuration.nix << EOF
 { config, lib, pkgs, ... }: {
   imports = [
