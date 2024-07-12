@@ -56,25 +56,15 @@ makeConf() {
     zramSwap.enable = ${zramswap};
     networking.hostName = "$(hostname -s)";
     networking.domain = "$(hostname -d)";
-    services.openssh.enable = true;
 
     users.users.xnode = {
       isNormalUser = true;
       extraGroups = [ "wheel" ];
     };
     security.sudo.wheelNeedsPassword = false;
-    users.users.xnode.openssh.authorizedKeys.keys = [$(while read -r line; do
-      line=$(echo -n "$line" | sed 's/\r//g')
-      trimmed_line=$(echo -n "$line" | xargs)
-      echo -n "''$trimmed_line'' "
-    done <<< "$keys")];
 
     services.getty.autologinUser = lib.mkForce "xnode";
     services.getty.greetingLine = ''<<< Welcome to Openmesh XnodeOS \${config.system.nixos.label} (\\m) - \\l >>>'';
-
-    environment.systemPackages = with pkgs; [
-      nyancat
-    ];
 
     system.stateVersion = "24.11";
   };
